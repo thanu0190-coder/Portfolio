@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TaskManager</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font:14px Arial;background:#f7f9ff;color:#192747;display:flex}
+aside{width:220px;background:white;padding:25px 12px;height:100vh;position:sticky;top:0;border-right:1px solid #dfe6f5}
+.logo{font-size:22px;font-weight:bold;margin:0 8px 35px}.logo span{color:#5046f5}
+.nav{display:block;width:100%;padding:16px;border:0;border-radius:10px;background:white;text-align:left;color:#637397;margin:5px 0;cursor:pointer}
+.nav.active,.nav:hover{background:#efefff;color:#5046f5}
+.quote{text-align:center;color:#8090b5;margin-top:160px;line-height:1.7}
+main{padding:25px;width:calc(100% - 220px)}
+header{display:flex;justify-content:space-between;align-items:start;margin-bottom:28px}
+h1{font-size:27px;margin:0 0 10px}header p{color:#637397;margin:0}
+button,input,textarea,select{font:inherit}
+.theme{border:1px solid #dfe6f5;border-radius:25px;background:white;padding:12px;cursor:pointer}
+.card,.tablebox{background:white;border:1px solid #dfe6f5;border-radius:13px;box-shadow:0 2px 8px #32466d08}
+.card{padding:20px}h2{font-size:20px;margin:0 0 18px}
+.plus{background:#5046f5;color:white;padding:10px 13px;border-radius:10px;margin-right:12px}
+input,textarea,select{padding:14px;border:1px solid #d8e2f4;border-radius:9px;background:white;color:#263958}
+#title,#desc{width:100%;margin-bottom:15px}#desc{height:85px;resize:vertical}
+.formrow{display:flex;gap:12px}.formrow input,.formrow select{flex:1;min-width:0}
+.primary{background:#5046f5;color:white;border:0;border-radius:9px;padding:15px 22px;cursor:pointer;font-weight:bold}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:30px 2px 20px}
+.filters{display:flex;gap:10px}.filter{border:0;background:#eeeefe;border-radius:10px;padding:13px 22px;cursor:pointer}
+.filter.active{background:#5046f5;color:white}#search{width:280px}
+.tablebox{overflow:hidden}table{width:100%;border-collapse:collapse;text-align:left}
+th{color:#637397;background:#fbfcff;font-size:13px}
+th,td{padding:17px 12px;border-bottom:1px solid #e2e8f5}
+th:first-child,td:first-child{padding-left:20px}
+.name{font-weight:bold;margin-bottom:7px}.desc{color:#637397;line-height:1.5}
+.pill{display:inline-block;border-radius:20px;padding:8px 13px;font-size:12px;font-weight:bold;white-space:nowrap}
+.high{background:#ffe4e7;color:#df3d4c}.medium{background:#e4f1ff;color:#2475d7}.low{background:#d9f7eb;color:#078f6b}
+.pending{background:#fff3cf;color:#a66a00}.completed{background:#d9f7eb;color:#078f6b}
+.actions button{border:0;border-radius:7px;padding:9px 11px;color:white;cursor:pointer}
+.edit{background:#5046f5}.del{background:#fa5364}
+.check{accent-color:#5046f5}.date{color:#637397;white-space:nowrap}
+.foot{padding:14px 20px;color:#637397;font-size:12px}.empty{text-align:center;padding:25px;color:#637397}
+body.dark{background:#111827;color:#edf2ff}
+body.dark aside,body.dark .card,body.dark .tablebox,body.dark .theme{background:#182235;color:#edf2ff;border-color:#2c3953}
+body.dark .nav{background:transparent;color:#a8b6d2}
+body.dark .nav.active{background:#27314c;color:#a9a3ff}
+body.dark input,body.dark textarea,body.dark select{background:#141e30;color:white;border-color:#2c3953}
+body.dark th{background:#1b263a}body.dark td,body.dark th{border-color:#2c3953}
+body.dark .filter{background:#232d47;color:white}body.dark .filter.active{background:#5046f5}
+body.dark .desc,body.dark .date,body.dark .foot,body.dark header p{color:#a8b6d2}
+@media(max-width:850px){
+ body{display:block}aside{width:100%;height:auto;position:static;padding:12px}
+ .logo{margin:0 5px 10px}.nav{display:inline-block;width:auto;padding:10px;font-size:12px}
+ .quote{display:none}main{width:100%;padding:18px 10px}h1{font-size:21px}
+ .toolbar,.formrow{flex-wrap:wrap}.filters{width:100%}.filter{flex:1;padding:12px 5px}
+ #search{width:100%}.formrow input,.formrow select{min-width:40%}
+ .primary{flex:1}.tablebox{overflow-x:auto}table{min-width:780px}
+}
+</style>
+</head>
+<body>
+<aside>
+<div class="logo">☑ Task<span>Manager</span></div>
+<button class="nav active" data-filter="all">⌂ &nbsp; Home</button>
+<button class="nav" data-filter="all">☷ &nbsp; All Tasks</button>
+<button class="nav" data-filter="completed">⊙ &nbsp; Completed</button>
+<button class="nav" data-filter="pending">◷ &nbsp; Pending</button>
+<div class="quote">♡<br>Small steps<br>build big dreams<br>☺</div>
+</aside>
+
+<main>
+<header>
+<div><h1>Hello, Thanushree! 👋</h1><p>Stay organized, get things done!</p></div>
+<button class="theme" id="theme">☀️　🌙</button>
+</header>
+
+<section class="card">
+<h2><span class="plus">＋</span><span id="heading">Add New Task</span></h2>
+<form id="form">
+<input id="title" placeholder="Enter task title..." required>
+<textarea id="desc" placeholder="Enter task description (optional)..."></textarea>
+<div class="formrow">
+<input type="date" id="date" aria-label="Due date">
+<select id="priority"><option>Medium</option><option>High</option><option>Low</option></select>
+<button class="primary" id="submit">＋ Add Task</button>
+</div>
+</form>
+</section>
+
+<div class="toolbar">
+<div class="filters">
+<button class="filter active" data-filter="all">All</button>
+<button class="filter" data-filter="pending">Pending</button>
+<button class="filter" data-filter="completed">Completed</button>
+</div>
+<input id="search" placeholder="⌕ Search tasks...">
+</div>
+
+<section class="tablebox">
+<table>
+<thead><tr><th>✓</th><th>Task</th><th>Priority</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+<tbody id="list"></tbody>
+</table>
+<div class="empty" id="empty" hidden>No tasks found. Add a task above!</div>
+<div class="foot" id="count"></div>
+</section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+let tasks=JSON.parse(localStorage.getItem("tasks")||"null")||[
+{id:1,title:"Complete Web Development Assignment",desc:"Finish the portfolio project and upload on GitHub.",priority:"High",date:"2026-10-10",done:false},
+{id:2,title:"Read Chapter 4 - JavaScript",desc:"Go through functions, events and DOM manipulation.",priority:"Medium",date:"2026-10-08",done:true},
+{id:3,title:"Prepare for BD Lab",desc:"Revise REST API, Flask and Node.js basics.",priority:"High",date:"2026-10-12",done:false},
+{id:4,title:"Study for Internal Exam",desc:"Focus on Unit 1, 2 and 4 topics.",priority:"Medium",date:"2026-10-15",done:false},
+{id:5,title:"Workout",desc:"Stay healthy and fresh! 💪",priority:"Low",date:"2026-10-09",done:false}];
+let filter="all",editing=null;
+
+function save(){localStorage.setItem("tasks",JSON.stringify(tasks))}
+function safe(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){
+let q=$("search").value.toLowerCase();
+let arr=tasks.filter(t=>(filter==="all"||(filter==="completed"?t.done:!t.done))&&(t.title+" "+t.desc).toLowerCase().includes(q));
+$("list").innerHTML=arr.map(t=>`<tr>
+<td><input class="check" type="checkbox" ${t.done?"checked":""} onchange="toggleTask(${t.id})"></td>
+<td><div class="name">${safe(t.title)}</div><div class="desc">${safe(t.desc)}</div></td>
+<td><span class="pill ${t.priority.toLowerCase()}">${t.priority}</span></td>
+<td class="date">${t.date?new Date(t.date+"T00:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}):"No date"}</td>
+<td><span class="pill ${t.done?"completed":"pending"}">${t.done?"Completed":"Pending"}</span></td>
+<td class="actions"><button class="edit" onclick="editTask(${t.id})">✎</button> <button class="del" onclick="deleteTask(${t.id})">▤</button></td>
+</tr>`).join("");
+$("empty").hidden=arr.length>0;
+$("count").textContent=`Showing ${arr.length} of ${tasks.length} tasks`;
+}
+function toggleTask(id){let t=tasks.find(t=>t.id===id);t.done=!t.done;save();render()}
+function deleteTask(id){tasks=tasks.filter(t=>t.id!==id);save();render()}
+function editTask(id){
+let t=tasks.find(t=>t.id===id);editing=id;
+$("title").value=t.title;$("desc").value=t.desc;$("date").value=t.date;$("priority").value=t.priority;
+$("heading").textContent="Edit Task";$("submit").textContent="Save Changes";
+window.scrollTo({top:0,behavior:"smooth"});
+}
+$("form").onsubmit=e=>{
+e.preventDefault();
+let d={title:$("title").value.trim(),desc:$("desc").value.trim(),date:$("date").value,priority:$("priority").value};
+if(!d.title)return;
+if(editing!==null){tasks=tasks.map(t=>t.id===editing?{...t,...d}:t);editing=null}
+else tasks.push({id:Date.now(),...d,done:false});
+save();$("form").reset();$("heading").textContent="Add New Task";$("submit").textContent="＋ Add Task";render();
+};
+$("search").oninput=render;
+document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{
+filter=b.dataset.filter;
+document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));
+render();
+});
+$("theme").onclick=()=>document.body.classList.toggle("dark");
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator App</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;display:grid;place-items:center;
+ font-family:Arial,sans-serif;background:#f4f5ff;color:#202747;
+ transition:.3s
+}
+.calculator{
+ width:340px;max-width:94vw;padding:24px;
+ background:white;border-radius:24px;
+ box-shadow:0 15px 45px #3332
+}
+.top{display:flex;justify-content:space-between;align-items:center}
+h2{font-size:22px;margin:0 0 20px}
+button{cursor:pointer;border:0;font-size:18px}
+.theme{background:#eeeefe;padding:9px;border-radius:10px}
+#display{
+ width:100%;height:85px;margin:10px 0 20px;padding:15px;
+ border:0;border-radius:12px;background:#f5f6ff;
+ color:#202747;text-align:right;font-size:32px;outline:none
+}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.keys button{height:58px;border-radius:13px;background:#f0f1fc;color:#252d4c}
+.keys button:hover{filter:brightness(.94)}
+.keys .op{background:#e5e2ff;color:#5046f5}
+.keys .clear{background:#ffe5e8;color:#df4053}
+.keys .equal{background:#5046f5;color:white}
+.keys .zero{grid-column:span 2}
+body.dark{background:#111827;color:#f2f4ff}
+body.dark .calculator{background:#1c263a}
+body.dark #display{background:#131c2e;color:white}
+body.dark .keys button{background:#2b3650;color:white}
+body.dark .keys .op{background:#3d356c;color:#c4bdff}
+body.dark .keys .clear{background:#552d3b;color:#ffb5c0}
+body.dark .keys .equal{background:#6555f5}
+body.dark .theme{background:#2b3650;color:white}
+</style>
+</head>
+
+<body>
+<div class="calculator">
+ <div class="top">
+  <h2>🧮 Calculator</h2>
+  <button class="theme" onclick="toggleTheme()">🌙</button>
+ </div>
+
+ <input id="display" value="0" readonly>
+
+ <div class="keys">
+  <button class="clear" onclick="clearDisplay()">AC</button>
+  <button class="op" onclick="del()">DEL</button>
+  <button class="op" onclick="percent()">%</button>
+  <button class="op" onclick="press('/')">÷</button>
+
+  <button onclick="press('7')">7</button>
+  <button onclick="press('8')">8</button>
+  <button onclick="press('9')">9</button>
+  <button class="op" onclick="press('*')">×</button>
+
+  <button onclick="press('4')">4</button>
+  <button onclick="press('5')">5</button>
+  <button onclick="press('6')">6</button>
+  <button class="op" onclick="press('-')">−</button>
+
+  <button onclick="press('1')">1</button>
+  <button onclick="press('2')">2</button>
+  <button onclick="press('3')">3</button>
+  <button class="op" onclick="press('+')">+</button>
+
+  <button class="zero" onclick="press('0')">0</button>
+  <button onclick="press('.')">.</button>
+  <button class="equal" onclick="calculate()">=</button>
+ </div>
+</div>
+
+<script>
+const display=document.getElementById("display");
+let expression="";
+
+function press(value){
+ if(display.value==="Error") expression="";
+ if(display.value==="0" && /^[0-9]$/.test(value))
+  expression=value;
+ else expression+=value;
+ display.value=expression||"0";
+}
+
+function clearDisplay(){
+ expression="";
+ display.value="0";
+}
+
+function del(){
+ expression=expression.slice(0,-1);
+ display.value=expression||"0";
+}
+
+function calculate(){
+ try{
+  if(!expression || !/^[0-9+\-*/.() ]+$/.test(expression))
+   throw Error();
+  let result=Function('"use strict";return ('+expression+')')();
+  if(!Number.isFinite(result)) throw Error();
+  expression=String(Number(result.toPrecision(12)));
+  display.value=expression;
+ }catch{
+  display.value="Error";
+  expression="";
+ }
+}
+
+function percent(){
+ try{
+  if(!expression) return;
+  if(!/^[0-9+\-*/.() ]+$/.test(expression)) throw Error();
+  let result=Function('"use strict";return ('+expression+')')();
+  if(!Number.isFinite(result)) throw Error();
+  expression=String(result/100);
+  display.value=expression;
+ }catch{
+  display.value="Error";
+  expression="";
+ }
+}
+
+function toggleTheme(){
+ document.body.classList.toggle("dark");
+}
+</script>
+</body>
+</html>

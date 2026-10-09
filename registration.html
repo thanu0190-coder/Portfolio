@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e9d5ff, #c4b5fd, #f5d0fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 35px;
+            width: 100%;
+            max-width: 390px;
+            border-radius: 22px;
+            box-shadow: 0 15px 40px #5b21b633;
+            animation: appear 0.7s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon {
+            width: 65px;
+            height: 65px;
+            background: #ede9fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 15px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4c1d95;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px 14px;
+            margin: 9px 0;
+            border: 1px solid #ddd6fe;
+            border-radius: 10px;
+            background: #faf9ff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #8b5cf6;
+            background: white;
+            box-shadow: 0 0 0 3px #8b5cf622;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 18px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px #7c3aed55;
+        }
+
+        #message {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 0;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+            margin-top: 22px;
+        }
+
+        .footer span {
+            color: #7c3aed;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 420px) {
+            .container {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Create Account</h2>
+    <p class="subtitle">Join us! Fill in your details below.</p>
+
+    <form id="registerForm">
+
+        <input type="text" placeholder="Full Name" required>
+
+        <input type="email" placeholder="Email Address" required>
+
+        <select required>
+            <option value="">Select Gender</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Other">Other</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+
+        <input type="password" id="password"
+               placeholder="Create Password"
+               minlength="6" required>
+
+        <input type="password" id="confirmPassword"
+               placeholder="Confirm Password"
+               minlength="6" required>
+
+        <button type="submit">Create Account</button>
+
+    </form>
+
+    <p id="message" role="status"></p>
+
+    <p class="footer">
+        Made with 💜 for you
+    </p>
+
+</div>
+
+<script>
+    document.getElementById("registerForm")
+        .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        let password = document.getElementById("password").value;
+        let confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+        let message = document.getElementById("message");
+
+        if (password !== confirmPassword) {
+            message.style.color = "#dc2626";
+            message.textContent = "❌ Passwords do not match!";
+        } else {
+            message.style.color = "#16a34a";
+            message.textContent = "🎉 Registration successful!";
+            this.reset();
+        }
+    });
+</script>
+
+</body>
+</html>
