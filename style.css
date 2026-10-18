@@ -685,3 +685,329 @@ footer p {
         text-align: center;
     }
 }
+
+/* Small futuristic hacker display picture */
+.hacker-dp {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    border-radius: 50%;
+    background: #0a0a12;
+    border: 2px solid #a855f7;
+    box-shadow:
+        0 0 12px rgba(168, 85, 247, 0.6),
+        0 0 28px rgba(72, 229, 255, 0.2),
+        inset 0 0 20px rgba(168, 85, 247, 0.15);
+}
+
+.hacker-dp i {
+    font-size: 47px;
+    color: #48e5ff;
+    z-index: 2;
+    text-shadow: 0 0 15px rgba(72, 229, 255, 0.8);
+}
+
+.dp-glow {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px solid #48e5ff;
+    opacity: 0.65;
+    animation: hackerPulse 2.5s ease-in-out infinite;
+}
+
+.dp-status {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    right: 3px;
+    bottom: 5px;
+    border: 2px solid #080812;
+    border-radius: 50%;
+    background: #a855f7;
+    box-shadow: 0 0 10px #a855f7;
+    z-index: 3;
+}
+
+@keyframes hackerPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.12);
+        opacity: 0.25;
+    }
+}
+
+@media (max-width: 600px) {
+    .hacker-dp {
+        width: 82px;
+        height: 82px;
+    }
+
+    .hacker-dp i {
+        font-size: 38px;
+    }
+}
+/* ==========================================
+   ADDITIONAL HACKER EFFECTS
+   Add this at the END of style.css
+   ========================================== */
+
+/* Hacker background canvas */
+#matrixCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.13;
+}
+
+/* Keep existing page content above the background */
+body > header,
+body > section,
+body > footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* Subtle CRT scanlines */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.10;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(100, 255, 150, 0.10) 4px
+    );
+}
+
+/* Mouse-following neon spotlight */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9;
+    background: radial-gradient(
+        350px circle at var(--mouse-x, 50%) var(--mouse-y, 30%),
+        rgba(0, 255, 100, 0.065),
+        transparent 75%
+    );
+}
+
+/* Futuristic selection color */
+::selection {
+    background:#00ff88;
+    color: #050505;
+}
+
+/* Smooth green glow on interactive elements */
+a,
+button {
+    transition:
+        color 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
+}
+
+a:hover,
+button:hover {
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.35);
+}
+
+/* Glowing project cards */
+.project-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.project-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 70%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+        110deg,
+        transparent,
+        rgba(0, 255, 136, 0.09),
+        transparent
+    );
+    transition: left 0.65s ease;
+}
+
+.project-card:hover::before {
+    left: 150%;
+}
+
+.project-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(0, 255, 136, 0.45);
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.25),
+        0 0 18px rgba(0, 255, 136, 0.09);
+}
+
+/* Animated borders around skill cards */
+.skill-card {
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 255, 136, 0.5);
+    box-shadow: 0 0 22px rgba(0, 255, 136, 0.09);
+}
+
+/* Hacker-style animated heading accent */
+.section-title h2 span,
+.hero h1 span,
+.logo span,
+footer h3 span {
+    text-shadow: 0 0 12px rgba(0, 255, 136, 0.25);
+}
+
+/* Scroll reveal animation */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Developer terminal */
+.hacker-terminal {
+    width: fit-content;
+    max-width: 100%;
+    margin: 18px 0;
+    padding: 13px 17px;
+    background: rgba(5, 12, 9, 0.88);
+    border: 1px solid rgba(0, 255, 136, 0.30);
+    border-radius: 8px;
+    box-shadow: 0 0 24px rgba(0, 255, 136, 0.07);
+    color: #a6ffca;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    text-align: left;
+}
+
+.terminal-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 7px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+}
+
+.terminal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 7px rgba(0, 255, 136, 0.55);
+}
+
+.terminal-label {
+    margin-left: 6px;
+    color: #7d9e89;
+    font-size: 11px;
+}
+
+.terminal-prompt {
+    color: #00ff88;
+}
+
+.terminal-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    margin-left: 3px;
+    vertical-align: middle;
+    background: #00ff88;
+    animation: terminalBlink 0.8s steps(2, start) infinite;
+}
+
+@keyframes terminalBlink {
+    to {
+        visibility: hidden;
+    }
+}
+
+/* Subtle floating effect for your profile icon */
+.hacker-dp {
+    animation: hackerFloat 4s ease-in-out infinite;
+}
+
+@keyframes hackerFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* Mobile performance and accessibility */
+@media (max-width: 600px) {
+    #matrixCanvas {
+        opacity: 0.07;
+    }
+
+    .hacker-terminal {
+        font-size: 11px;
+        padding: 10px 12px;
+    }
+
+    body::after {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .reveal-on-scroll {
+        opacity: 1;
+        transform: none;
+    }
+}
